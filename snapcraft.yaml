@@ -1,4 +1,4 @@
-name: aws
+name: awscli
 summary: Universal Command Line Interface for Amazon Web Services
 description: |
   The AWS Command Line Interface (CLI) is a unified tool to manage your AWS
@@ -12,6 +12,7 @@ apps:
   aws:
     # Workaround https://bugs.launchpad.net/snappy/+bug/1664427
     command: usr/bin/python3 $SNAP/bin/aws
+    aliases: [aws]
 parts:
   aws:
     plugin: python
