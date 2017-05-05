@@ -1,0 +1,19 @@
+name: awscli
+summary: Universal Command Line Interface for Amazon Web Services
+description: |
+  The AWS Command Line Interface (CLI) is a unified tool to manage your AWS
+  services. With just one tool to download and configure, you can control
+  multiple AWS services from the command line and automate them through
+  scripts.
+version: "1.11.77"
+confinement: classic
+grade: stable
+apps:
+  aws:
+    # Workaround https://bugs.launchpad.net/snappy/+bug/1664427
+    command: usr/bin/python3 $SNAP/bin/aws
+    aliases: [aws]
+parts:
+  aws:
+    plugin: python
+    source: https://github.com/aws/aws-cli.git
