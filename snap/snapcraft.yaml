@@ -1,19 +1,57 @@
-name: awscli
-summary: Universal Command Line Interface for Amazon Web Services
-description: |
-  The AWS Command Line Interface (CLI) is a unified tool to manage your AWS
-  services. With just one tool to download and configure, you can control
-  multiple AWS services from the command line and automate them through
-  scripts.
-version: "1.11.77"
-confinement: classic
+name: aws-cli
+confinement: strict
+base: core18
 grade: stable
+adopt-info: aws-cli
+description: |
+  The AWS Command Line Interface (AWS CLI) is an open source tool that enables
+  you to interact with AWS services using commands in your command-line shell.
+  With minimal configuration, you can start using functionality equivalent to
+  that provided by the browser-based AWS Management Console from the command
+  prompt.
+  All IaaS (infrastructure as a service) AWS administration, management, and 
+  access functions in the AWS Management Console are available in the AWS API
+  and CLI. New AWS IaaS features and services provide full AWS Management
+  Console functionality through the API and CLI at launch or within 180 days
+  of launch.
+  The AWS CLI provides direct access to the public APIs of AWS services. You 
+  can explore a service's capabilities with the AWS CLI, and develop shell
+  scripts to manage your resources. Or, you can take what you learn to develop
+  programs in other languages by using the AWS SDKs. 
+  In addition to the low-level, API-equivalent commands, several AWS services
+  provide customizations for the AWS CLI. Customizations can include
+  higher-level commands that simplify using a service with a complex API. For 
+  example, the aws s3 set of commands provide a familiar syntax for managing 
+  files in Amazon Simple Storage Service (Amazon S3).
+
+plugs:
+  personal-files:
+    read:
+      - $HOME/.aws
+
 apps:
   aws:
-    # Workaround https://bugs.launchpad.net/snappy/+bug/1664427
-    command: usr/bin/python3 $SNAP/bin/aws
-    aliases: [aws]
+    adapter: full
+    command-chain:
+      - bin/launcher.sh
+    command: bin/aws
+    plugs:
+      - network
+      - network-bind
+      - personal-files
+      - home
+
 parts:
-  aws:
+  launcher:
+    plugin: dump
+    source: https://github.com/mikf/gallery-dl.git
+    source-depth: 1
+    organize:
+      snap/local/launchers/gallery-dl-launch: bin/launcher.sh
+    prime:
+      - bin/launcher.sh
+  aws-cli:
     plugin: python
     source: https://github.com/aws/aws-cli.git
+    source-depth: 1
+    parse-info: [setup.py]
